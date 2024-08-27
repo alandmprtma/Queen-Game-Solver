@@ -2,6 +2,7 @@
 import { useState } from 'react';
 import FileUpload from '../components/FileUpload';
 import BoardDisplay from '../components/BoardDisplay';
+import BeatLoader from "react-spinners/BeatLoader";
 
 export default function Home() {
   const [file, setFile] = useState(null);
@@ -9,13 +10,19 @@ export default function Home() {
   const [solutionBoard, setSolutionBoard] = useState([]);
   const [algorithm, setAlgorithm] = useState('BFS'); // Default to BFS
   const [fileContent, setFileContent] = useState('');
+  const [loading, setLoading] = useState(false);
 
 
   
   // Handle file upload and parsing
   const handleFileChange = (event) => {
     const file = event.target.files[0];
+    if (!file) {
+      alert("No file selected");
+      return;
+    }
     setFile(file);
+    setSolutionBoard([]); // Reset solution board when a new file is uploaded 
     const reader = new FileReader();
 
     reader.onload = (e) => {
@@ -43,6 +50,8 @@ export default function Home() {
       return;
     }
   
+    setLoading(true); // Set loading to true when starting the request
+    
     try {
       const response = await fetch('http://127.0.0.1:5000/solve', {
         method: 'POST',
@@ -51,6 +60,10 @@ export default function Home() {
         },
         body: JSON.stringify({ fileContent, algorithm }),
       });
+  
+      if (!response.ok) {
+        throw new Error("Failed to get response from server"); // Handle non-2xx HTTP codes
+      }
   
       const data = await response.json();
       console.log(data.board);
@@ -71,9 +84,11 @@ export default function Home() {
     } catch (error) {
       console.error("Error:", error);
       alert("An error occurred. Please try again.");
+    } finally {
+      setLoading(false); // Set loading to false after the request is complete, regardless of success or failure
     }
   };
-  
+
 
   return (
     <div className=" bg-[#6a1b9a] min-h-screen w-screen ">
@@ -89,18 +104,24 @@ export default function Home() {
           id="algorithm"
           value={algorithm}
           onChange={handleAlgorithmChange}
-          className="p-2 border rounded"
+          className="p-2 border rounded text-black font-bold"
         >
           <option value="BFS">BFS</option>
           <option value="DFS">DFS</option>
         </select>
       </div>
-      <button 
-        onClick={handleSubmit} 
-        className="mt-4 p-2 bg-blue-500 w-[150px] text-white rounded"
-      >
-        Submit
-      </button>
+      {loading ? (
+          <div className="mt-4">
+            <BeatLoader color={"#ffffff"} loading={loading} size={15} />
+          </div>
+        ) : (
+          <button 
+            onClick={handleSubmit} 
+            className="mt-4 p-2 bg-blue-500 w-[150px] text-white rounded"
+          >
+            Submit
+          </button>
+        )}
       <BoardDisplay board={board} solutionBoard={solutionBoard}/>
       <div className='pt-[50px]'></div>
       </div>
