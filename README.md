@@ -1,6 +1,8 @@
+<div align="center">
+  <img src="./src/frontend/public/Queens-Game-Logo.png" alt="Logo" width="200"/>
+</div>
 
-
-# Queen-Game-Solver
+# 👑 Queen-Game-Solver
 ## 📝 Application Description
 ### Overview
 Queen-Game-Solver is an interactive application that provides solutions to a variant of the classic N-Queens problem, where the board is divided into color-coded regions, and specific rules determine where queens and other chess pieces can be placed. The application uses recursive algorithms such as BFS (Breadth-First Search) and DFS (Depth-First Search) to find valid solutions. The solutions must obey the constraints of the Queens Game, ensuring that no piece conflicts with others based on standard chess rules and region-based restrictions.
