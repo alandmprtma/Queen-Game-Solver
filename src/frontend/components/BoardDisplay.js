@@ -50,13 +50,13 @@ export default function BoardDisplay({ board, solutionBoard }) {
 
         // Check if solutionBoard exists and has the correct structure
         const solutionCell = solutionBoard && solutionBoard[rowIndex] ? solutionBoard[rowIndex][colIndex] : null;
-
+        console.log(solutionCell)
         return (
           <div
             key={index}
             className={`p-4 w-[65px] h-[65px] border ${colorMap[cell]} text-black font-bold flex flex-col text-center justify-center`}
           >
-            {solutionCell === 'Q' ? 'Q' : ''}
+             {['Q', 'QS', 'R', 'B', 'K'].includes(solutionCell) ? solutionCell : ''}
           </div>
         );
       })}

@@ -9,6 +9,7 @@ export default function Home() {
   const [board, setBoard] = useState([]);
   const [solutionBoard, setSolutionBoard] = useState([]);
   const [algorithm, setAlgorithm] = useState('BFS'); // Default to BFS
+  const [chessPiece, setChessPiece] = useState('Q');
   const [fileContent, setFileContent] = useState('');
   const [loading, setLoading] = useState(false);
 
@@ -43,6 +44,10 @@ export default function Home() {
     setAlgorithm(e.target.value);
   };
 
+  const handleChessPieceChange = (e) => {
+    setChessPiece(e.target.value);
+  }
+
   // Handle submission and backend interaction
   const handleSubmit = async () => {
     if (!fileContent) {
@@ -58,7 +63,7 @@ export default function Home() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ fileContent, algorithm }),
+        body: JSON.stringify({ fileContent, algorithm, chessPiece }),
       });
   
       if (!response.ok) {
@@ -67,7 +72,6 @@ export default function Home() {
   
       const data = await response.json();
       console.log(data.board);
-  
       // Salinan papan saat ini untuk diupdate
       const updatedBoard = board.map((rowArr, rowIndex) =>
         rowArr.map((cell, colIndex) => {
@@ -75,15 +79,29 @@ export default function Home() {
           if (data.board[rowIndex][colIndex] === 'Q') {
             return 'Q'; // Update dengan Q pada posisi yang diberikan
           }
+          else if (data.board[rowIndex][colIndex] === 'R'){
+            return 'R';
+          }
+          else if (data.board[rowIndex][colIndex] === 'K'){
+            return 'K';
+          }
+          else if (data.board[rowIndex][colIndex] === 'B'){
+            return 'B';
+          }
+          else if (data.board[rowIndex][colIndex] === 'QS'){
+            return 'QS';
+          }
           return cell; // Pertahankan sel lain seperti semula
         })
-      );
       
+      );
+
       setSolutionBoard(updatedBoard);
-  
+        
+
     } catch (error) {
       console.error("Error:", error);
-      alert("An error occurred. Please try again.");
+      alert("Solution Not Found");
     } finally {
       setLoading(false); // Set loading to false after the request is complete, regardless of success or failure
     }
@@ -108,6 +126,19 @@ export default function Home() {
         >
           <option value="BFS">BFS</option>
           <option value="DFS">DFS</option>
+        </select>
+        <label htmlFor="chessPiece" className="mr-2 ml-6">Select Chess Piece:</label>
+        <select
+          id="algorithm"
+          value={chessPiece}
+          onChange={handleChessPieceChange}
+          className="p-2 border rounded text-black font-bold"
+        >
+          <option value="Q">Q</option>
+          <option value="QS">Q Standard</option>
+          <option value="R">Rook</option>
+          <option value="B">Bishop</option>
+          <option value="K">Knight</option>
         </select>
       </div>
       {loading ? (
