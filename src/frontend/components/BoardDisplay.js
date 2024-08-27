@@ -50,7 +50,6 @@ export default function BoardDisplay({ board, solutionBoard }) {
 
         // Check if solutionBoard exists and has the correct structure
         const solutionCell = solutionBoard && solutionBoard[rowIndex] ? solutionBoard[rowIndex][colIndex] : null;
-        console.log(solutionCell)
         return (
           <div
             key={index}
