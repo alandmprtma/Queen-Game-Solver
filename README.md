@@ -128,7 +128,7 @@ A 2 2 2 @
   <p><i>Queens Solution</i></p>
 </div>
 <div align="center">
-  <img src="./img/src/backend" alt="Knight" width="250"/>
+  <img src="./img/knight solution.png" alt="Knight" width="250"/>
   <p><i>Knight Solution</i></p>
 </div>
 
