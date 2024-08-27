@@ -1,8 +1,6 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 from collections import deque
-import random
-import math
 
 app = Flask(__name__)
 CORS(app)
